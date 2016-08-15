@@ -77,7 +77,11 @@ class UploadController extends Controller {
 
             $filename = $file->getClientOriginalName();
 
-            $new_filename = Str::slug(str_replace($extension, '', $filename)) . "." . $extension;
+            // $new_filename = Str::slug(str_replace($extension, '', $filename)) . "." . $extension;
+            $originalNameWithoutExt = substr($filename, 0, strlen($filename) - strlen($extension) - 1);
+
+            $filename = $this->sanitize($originalNameWithoutExt);
+            $new_filename = $this->createUniqueFilename($destinationPath, $filename, $extension );
 
             Input::file('file_to_upload')->move($destinationPath, $new_filename);
 
